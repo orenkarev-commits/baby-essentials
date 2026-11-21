@@ -1,0 +1,40 @@
+[
+ {
+  "name": "Pampers Premium · Size 4",
+  "category": "diapers",
+  "bundle": 3,
+  "target": 100.0,
+  "barcodes": {
+   "8700216890946": 28
+  }
+ },
+ {
+  "name": "Pampers Premium · Size 4+",
+  "category": "diapers",
+  "bundle": 3,
+  "target": 100.0,
+  "barcodes": {
+   "8006530259217": 26
+  }
+ },
+ {
+  "name": "Pampers Premium · Size 5",
+  "category": "diapers",
+  "bundle": 3,
+  "target": 100.0,
+  "barcodes": {
+   "8700216891103": 24
+  }
+ },
+ {
+  "name": "Materna Gold Pro 5HM-O · 700 g",
+  "category": "formula",
+  "bundle": 1,
+  "target": 81.0,
+  "barcodes": {
+   "7290018132661": 700,
+   "7290018132647": 700,
+   "7290018132623": 700
+  }
+ }
+]

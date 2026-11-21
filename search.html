@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Search prices</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0B4F6C">
+<meta name="application-name" content="Baby Essentials">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Baby Essentials">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<style>
+  :root { color-scheme: light dark;
+    --color-bg: #FBF8F2; --font-anthropic-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 16px; --cds-gap-xl: 32px;
+    --cds-pad-sm: 8px; --cds-pad-md: 16px; --cds-pad-lg: 22px; --cds-radius: 14px;
+    --cds-font-size-caption: 13px; --cds-font-size-body: 15px; --cds-font-size-heading: 18px; --cds-font-size-title: 22px;
+    --cds-font-weight-medium: 600; --cds-dur-slow: .5s; --cds-ease-out: cubic-bezier(.2,.8,.2,1); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --color-bg: #0A161B; } }
+  :root[data-theme="dark"] { --color-bg: #0A161B; }
+  body { margin: 0; background: var(--color-bg); padding: 16px; }
+  @media (min-width: 46rem) { body { padding: 32px; } }
+  .be-foot { font-size: 12px; color: var(--be-muted); margin: 0; }
+  .be-nav { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .be-nav a { font: inherit; font-size: 14px; text-decoration: none; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--be-line); color: var(--be-ink); background: var(--be-paper); }
+  .be-nav a[aria-current="page"] { background: var(--be-sea); color: var(--be-sea-ink); border-color: var(--be-sea); }
+  .be-nav .be-brand { font-weight: 700; margin-right: auto; color: var(--be-lagoon); font-size: 16px; }
+  .be-pending { font-size: 12px; color: var(--be-amber); font-weight: 600; }
+  .be-labels { grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)) !important; }
+  .be-lbl-other .be-lbl-name { direction: rtl; text-align: right; unicode-bidi: plaintext; padding-right: 7.5rem; padding-left: 0; }
+  @media (max-width: 30rem) { .be-page .be-sticker { position: static; align-self: flex-start; min-width: 0; margin: 0 0 2px; transform: rotate(-3deg); } }
+  .be-lbl-other .be-big { font-size: calc(var(--cds-font-size-title) * 2); }
+
+  /*
+    Design plan (frontend-design skill), v4 "seaside"
+    Subject: a Tel Aviv parent's daily check on diapers and formula, read on a phone in a pharmacy aisle.
+    Concept: the shelf-edge price labels stay, now set on a Tel Aviv beach: a deep-sea header with a wave edge,
+    labels resting on sand, and coral for the one thing that matters, a real deal. The shop to buy from is
+    a deep-sea pill on every label and every table row, so "where" is as easy to see as "how much".
+    Color: deep sea #0B4F6C (header, shop pills), lagoon #0E8A7E (good news, availability),
+           sand #F5ECDD (shelf), driftwood #D9C7A7 (shelf rail), foam #E4F4F2 (deal rows),
+           coral #D2432B (deal sticker and deal text, white ink on it). Dark theme: night sea and wet sand.
+    Type: the dashboard's sans. Prices bold and tight; everything else regular or medium.
+  */
+  .be-page {
+    --be-sea: #0B4F6C; --be-sea-2: #1B7F99; --be-sea-ink: #FFFFFF;
+    --be-lagoon: #0E8A7E; --be-sand: #F5ECDD; --be-drift: #D9C7A7;
+    --be-foam: #E4F4F2; --be-coral: #D2432B; --be-coral-ink: #FFFFFF; --be-coral-text: #B8371F;
+    --be-amber: #9A5F0C; --be-paper: #FFFFFF; --be-ink: #10303D; --be-muted: #4F6873;
+    --be-line: #D7E3E6;
+    display: grid; gap: var(--cds-gap-xl); max-width: 74rem; margin-inline: auto;
+    font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; color: var(--be-ink);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .be-page {
+      --be-sea: #0F3B4F; --be-sea-2: #17617A; --be-lagoon: #4FD1BF; --be-sand: #1B2A2F; --be-drift: #3A4A4C;
+      --be-foam: #12363A; --be-coral: #F07257; --be-coral-ink: #1E0B06; --be-coral-text: #FF9278;
+      --be-amber: #F0B45A; --be-paper: #0F1E24; --be-ink: #E5F1F2; --be-muted: #9DB4BA; --be-line: #24393F;
+    }
+  }
+  :root[data-theme="dark"] .be-page {
+    --be-sea: #0F3B4F; --be-sea-2: #17617A; --be-lagoon: #4FD1BF; --be-sand: #1B2A2F; --be-drift: #3A4A4C;
+    --be-foam: #12363A; --be-coral: #F07257; --be-coral-ink: #1E0B06; --be-coral-text: #FF9278;
+    --be-amber: #F0B45A; --be-paper: #0F1E24; --be-ink: #E5F1F2; --be-muted: #9DB4BA; --be-line: #24393F;
+  }
+
+  /* Header: the sea, with a wave edge */
+  .be-head { position: relative; display: grid; gap: var(--cds-gap-sm); padding: var(--cds-pad-lg) var(--cds-pad-lg) calc(var(--cds-pad-lg) + 18px);
+    background: linear-gradient(160deg, var(--be-sea-2), var(--be-sea) 70%); color: var(--be-sea-ink); border-radius: var(--cds-radius); overflow: hidden; }
+  .be-head > * { max-width: 48rem; position: relative; }
+  .be-wave { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 22px; max-width: none; }
+  .be-wave path { fill: var(--color-bg); }
+  .be-title { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); opacity: .85; }
+  .be-take { margin: 0; font-size: calc(var(--cds-font-size-title) * 1.25); line-height: 1.3; font-weight: 400; text-wrap: balance; }
+  .be-meta { margin: 0; font-size: var(--cds-font-size-caption); opacity: .85; }
+
+  .be-shelfblock { display: grid; gap: var(--cds-gap-sm); }
+  .be-shelfname { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); color: var(--be-muted); }
+  .be-shelf { background: var(--be-sand); border-radius: var(--cds-radius) var(--cds-radius) 0 0; padding: calc(var(--cds-pad-md) + 6px) var(--cds-pad-md) 0; border-bottom: 10px solid var(--be-drift); }
+  .be-labels { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr)); padding-bottom: var(--cds-pad-md); }
+  .be-labels-formula { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 46rem) { .be-labels-formula { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+  .be-lbl { position: relative; display: flex; flex-direction: column; gap: var(--cds-gap-sm); background: var(--be-paper); padding: var(--cds-pad-lg) var(--cds-pad-lg) var(--cds-pad-md); min-width: 0;
+    border: 1px solid var(--be-line); border-radius: 10px; }
+  .be-lbl:has(.be-sticker[data-kind="deal"]) { border: 2px solid var(--be-coral); box-shadow: 0 6px 18px -10px var(--be-coral); }
+  .be-lbl-name { margin: 0; padding-right: 7.5rem; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); line-height: 1.2; }
+  .be-lbl-size { display: block; font-size: calc(var(--cds-font-size-title) * 1.2); font-weight: 700; line-height: 1.05; margin-top: 2px; }
+  .be-lbl-pack { margin: 0; color: var(--be-muted); font-size: var(--cds-font-size-caption); }
+
+  .be-sticker { position: absolute; top: calc(var(--cds-pad-md) * -1); right: var(--cds-pad-md); margin: 0; display: grid; justify-items: center; min-width: 6.5rem; padding: 10px 12px; background: var(--be-coral); color: var(--be-coral-ink); border-radius: 8px; transform: rotate(-4deg); box-shadow: 0 3px 0 color-mix(in srgb, var(--be-coral) 55%, #000); text-align: center; line-height: 1.1; }
+  .be-sticker::before { content: "DEAL"; font-size: 10px; font-weight: 800; letter-spacing: .12em; opacity: .85; }
+  .be-page .be-sticker b { font-size: var(--cds-font-size-heading); font-weight: 800; }
+  .be-sticker span { font-size: var(--cds-font-size-caption); }
+  .be-sticker[data-kind="none"] { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .be-sticker { animation: be-stick var(--cds-dur-slow) var(--cds-ease-out) both; }
+    @keyframes be-stick { from { transform: rotate(-14deg) scale(1.15); opacity: 0; } to { transform: rotate(-4deg) scale(1); opacity: 1; } }
+  }
+
+  .be-price { display: flex; align-items: baseline; gap: var(--cds-gap-sm); flex-wrap: wrap; margin-top: var(--cds-gap-sm); }
+  .be-big { font-size: calc(var(--cds-font-size-title) * 2.6); font-weight: 700; line-height: .95; letter-spacing: -.03em; }
+  .be-lbl:has(.be-sticker[data-kind="deal"]) .be-big { color: var(--be-coral-text); }
+  .be-big .be-cur { font-size: .5em; font-weight: 600; margin-right: 2px; vertical-align: .55em; letter-spacing: 0; }
+  .be-for { font-size: var(--cds-font-size-body); color: var(--be-muted); }
+
+  .be-unitbox { display: inline-grid; grid-template-columns: auto auto; align-items: baseline; gap: 2px 10px; align-self: flex-start; border: 1px solid var(--be-ink); border-radius: 4px; padding: 4px 10px; font-size: var(--cds-font-size-caption); }
+  .be-page .be-unitbox b { font-size: var(--cds-font-size-body); font-weight: 700; }
+
+  .be-verdict { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: var(--cds-font-size-body); }
+  .be-chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); border: 1px solid currentColor; white-space: nowrap; color: var(--be-muted); }
+  .be-chip[data-status="Excellent"] { color: var(--be-lagoon); background: color-mix(in srgb, var(--be-lagoon) 12%, transparent); }
+  .be-chip[data-status="Good"] { color: var(--be-amber); }
+  .be-chip[data-status="Not stocked"], .be-chip[data-status="Check failed"], .be-chip[data-status="Expensive"] { color: var(--be-coral-text); }
+
+  /* Where to buy: the shop is a deep-sea pill */
+  .be-where { margin: 0; display: grid; gap: 4px; font-size: var(--cds-font-size-body); justify-items: start; padding: var(--cds-pad-sm); background: color-mix(in srgb, var(--be-sea-2) 8%, transparent); border-radius: 8px; }
+  .be-buyat { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--be-muted); }
+  .be-shop { display: inline-block; padding: 3px 12px; border-radius: 999px; background: var(--be-sea); color: var(--be-sea-ink); font-weight: 700; font-size: var(--cds-font-size-body); }
+  .be-sub { color: var(--be-muted); font-size: var(--cds-font-size-caption); }
+  .be-avail { display: inline-flex; align-items: center; gap: 6px; font-size: var(--cds-font-size-caption); }
+  .be-avail::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--be-lagoon); flex: none; }
+
+  .be-ean { margin: auto 0 0; padding-top: var(--cds-pad-sm); border-top: 1px dashed var(--be-line); display: flex; align-items: end; gap: 10px; color: var(--be-muted); font-size: var(--cds-font-size-caption); letter-spacing: .04em; }
+  .be-bars { flex: none; width: 3.25rem; height: 1.1rem; background: repeating-linear-gradient(90deg, var(--be-ink) 0 1px, transparent 1px 3px, var(--be-ink) 3px 5px, transparent 5px 6px, var(--be-ink) 6px 7px, transparent 7px 10px); opacity: .6; }
+
+  .be-formula-note { display: grid; align-content: start; gap: var(--cds-gap-sm); background: var(--be-paper); border: 1px solid var(--be-line); border-radius: 10px; padding: var(--cds-pad-lg); font-size: var(--cds-font-size-body); line-height: 1.5; }
+  .be-formula-note p { margin: 0; max-width: 52ch; }
+  .be-formula-note h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+
+  .be-section { display: grid; gap: var(--cds-gap-md); min-width: 0; }
+  .be-sechead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--cds-gap-md); }
+  .be-sechead h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .be-sechead p { margin: 2px 0 0; color: var(--be-muted); font-size: var(--cds-font-size-caption); }
+  .be-key { display: inline-flex; align-items: center; gap: 6px; }
+  .be-key::before { content: ""; width: .9rem; height: .9rem; border-radius: 3px; background: var(--be-foam); border-left: 3px solid var(--be-coral); }
+  .be-tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); }
+  .be-tab { font: inherit; font-size: var(--cds-font-size-caption); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--be-line); background: transparent; color: var(--be-ink); cursor: pointer; }
+  .be-tab[aria-pressed="true"] { background: var(--be-sea); color: var(--be-sea-ink); border-color: var(--be-sea); }
+  .be-tab:focus-visible { outline: 2px solid var(--be-sea-2); outline-offset: 2px; }
+
+  .be-tablewrap { overflow-x: auto; border-top: 2px solid var(--be-sea); }
+  .be-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); }
+  .be-table th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--be-muted); font-size: var(--cds-font-size-caption); padding: 8px 10px; border-bottom: 1px solid var(--be-line); white-space: nowrap; }
+  .be-table td { padding: 10px; border-bottom: 1px solid var(--be-line); vertical-align: top; }
+  .be-table .num { text-align: right; white-space: nowrap; }
+  .be-table td.be-cond { color: var(--be-muted); font-size: var(--cds-font-size-caption); min-width: 14rem; }
+  .be-table tr.be-deal td { background: var(--be-foam); }
+  .be-table tr.be-deal td:first-child { box-shadow: inset 3px 0 0 var(--be-coral); }
+  .be-table tr.be-deal td.be-dealtxt { color: var(--be-coral-text); font-weight: 700; }
+  .be-table tr.be-out td:not(:last-child) { color: var(--be-muted); }
+  .be-table tr.be-group td { padding-top: var(--cds-pad-lg); font-weight: var(--cds-font-weight-medium); background: none; }
+  .be-tshop { display: inline-block; padding: 1px 10px; border-radius: 999px; border: 1px solid var(--be-sea-2); color: var(--be-ink); font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+  .be-table tr.be-top .be-tshop { background: var(--be-sea); border-color: var(--be-sea); color: var(--be-sea-ink); }
+  .be-best { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 800; letter-spacing: .1em; color: var(--be-lagoon); vertical-align: 1px; }
+  @media (max-width: 40rem) { .be-hide-narrow { display: none; } }
+
+  .be-notes { font-size: var(--cds-font-size-caption); color: var(--be-muted); }
+  .be-notes summary { cursor: pointer; color: var(--be-ink); }
+  .be-notes dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: var(--cds-gap-sm) 0 0; max-width: 70ch; }
+  .be-notes dt { color: var(--be-ink); }
+  .be-notes dd { margin: 0; }
+  @media (max-width: 30rem) { .be-notes dl { grid-template-columns: 1fr; } .be-lbl-name { padding-right: 0; } .be-sticker { position: static; justify-self: start; } }
+
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+
+  .be-page [hidden] { display: none !important; }
+  .be-ioshint { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 40rem; margin: 0 auto; padding: 12px 40px 12px 14px; border-radius: 12px; background: var(--be-sea); color: var(--be-sea-ink); font-size: 14px; line-height: 1.4; z-index: 11; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  .be-ioshint button { position: absolute; top: 8px; right: 8px; font: inherit; border: none; background: none; color: inherit; font-size: 16px; cursor: pointer; }
+  @media (max-width: 34rem) { .be-page .be-take { font-size: 19px; line-height: 1.35; } .be-head { padding: 18px 18px 30px; } .be-nav { gap: 4px; } .be-nav a, .be-nav button.be-installbtn { font-size: 13px; padding: 5px 10px; } .be-nav .be-brand { flex-basis: 100%; } }
+  .be-nav button.be-installbtn { font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--be-coral); background: var(--be-coral); color: var(--be-coral-ink); cursor: pointer; }
+  .be-offline { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 40rem; margin: 0 auto; padding: 10px 14px; border-radius: 10px; background: var(--be-ink); color: var(--be-paper); font-size: 14px; z-index: 10; }
+  @media (display-mode: standalone) { body { padding-top: max(16px, env(safe-area-inset-top)); } }
+
+  .be-card { background: var(--be-paper); border: 1px solid var(--be-line); border-radius: 12px; padding: var(--cds-pad-lg); display: grid; gap: 12px; }
+  .be-card > * { min-width: 0; }
+  .be-sel { width: 100%; box-sizing: border-box; text-overflow: ellipsis; }
+  .be-card h2 { margin: 0; font-size: var(--cds-font-size-heading); }
+  .be-card p { margin: 0; }
+  .be-grid2 { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); align-items: start; }
+  .be-in, .be-ta, .be-sel { font: inherit; font-size: 15px; padding: 8px 10px; border: 1px solid var(--be-line); border-radius: 8px; background: var(--be-paper); color: var(--be-ink); }
+  .be-ta { width: 100%; min-height: 7rem; box-sizing: border-box; resize: vertical; }
+  .be-in.sm { width: 6rem; }
+  .be-btn { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--be-sea); background: var(--be-sea); color: var(--be-sea-ink); cursor: pointer; }
+  .be-btn.ghost { background: transparent; color: var(--be-lagoon); border-color: var(--be-lagoon); }
+  .be-btn.coral { background: var(--be-coral); border-color: var(--be-coral); color: var(--be-coral-ink); }
+  .be-btn:disabled { opacity: .5; cursor: default; }
+  .be-btn:focus-visible, .be-in:focus-visible, .be-ta:focus-visible { outline: 2px solid var(--be-sea-2); outline-offset: 2px; }
+  .be-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .be-list { display: grid; gap: 8px; }
+  .be-item { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 12px; border: 1px solid var(--be-line); border-radius: 10px; background: var(--be-paper); }
+  .be-item .nm { font-weight: 600; direction: rtl; text-align: right; unicode-bidi: plaintext; }
+  .be-item .meta { color: var(--be-muted); font-size: 13px; }
+  .be-item .price { font-size: 26px; font-weight: 700; text-align: right; }
+  .be-item.deal .price { color: var(--be-coral-text); }
+  .be-chips { display: flex; flex-wrap: wrap; gap: 6px; grid-column: 1 / -1; }
+  .be-pchip { font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--be-line); white-space: nowrap; }
+  .be-pchip.top { background: var(--be-sea); color: var(--be-sea-ink); border-color: var(--be-sea); }
+  .be-pchip s { opacity: .65; }
+  .be-pchip .d { color: var(--be-coral-text); font-weight: 700; }
+  .be-pchip.top .d { color: #FFD9CF; }
+  .be-acts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+  .be-acts .be-btn { font-size: 12px; padding: 5px 11px; }
+  .be-group-h { margin: 18px 0 6px; font-size: 15px; font-weight: 600; color: var(--be-muted); }
+  .be-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--be-ink); color: var(--be-paper); padding: 10px 16px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .be-toast.on { opacity: 1; }
+  .be-sizes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .be-size { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--be-line); border-radius: 999px; cursor: pointer; font-size: 14px; background: var(--be-paper); }
+  .be-size:has(input:checked) { background: var(--be-sea); color: var(--be-sea-ink); border-color: var(--be-sea); }
+  .be-size input { accent-color: var(--be-sea); }
+  .be-tracked { display: grid; gap: 6px; }
+  .be-tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; align-items: center; padding: 8px 10px; border: 1px solid var(--be-line); border-radius: 8px; }
+  .be-tr .meta { overflow-wrap: anywhere; }
+  .be-tr .nm { font-weight: 600; }
+  .be-tr .meta { color: var(--be-muted); font-size: 12px; }
+  .be-x { font: inherit; border: none; background: none; color: var(--be-coral-text); cursor: pointer; font-size: 13px; }
+  label.be-f { display: grid; gap: 4px; font-size: 13px; color: var(--be-muted); }
+  .be-status { font-size: 13px; color: var(--be-muted); }
+</style>
+</head>
+<body>
+<div class="be-page">
+<nav class="be-nav"><span class="be-brand">Baby Essentials</span><a href="./">Dashboard</a><a href="./search.html" aria-current="page">Search prices</a><button type="button" class="be-installbtn" id="be-install" hidden>Install app</button></nav>
+
+  <header class="be-head">
+    <h1 class="be-title">Search prices</h1>
+    <p class="be-take">Type a few items, one per line, and see the cheapest Tel Aviv shop for each.</p>
+    <p class="be-meta" id="cat-meta">Loading this morning's prices…</p>
+    <svg class="be-wave" viewBox="0 0 1200 22" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 C 100 0 200 0 300 12 S 500 24 600 12 S 800 0 900 12 S 1100 24 1200 12 V22 H0 Z"/></svg>
+  </header>
+  <section class="be-card" id="mylist-card" hidden>
+    <h2>My list <span class="be-status">(saved on this phone only)</span></h2>
+    <div class="be-list" id="mylist"></div>
+  </section>
+  <section class="be-card">
+    <label class="be-f" for="q">Items to look up (Hebrew works best; pampers, huggies, wipes, materna, similac, sudocrem and a barcode also work)</label>
+    <textarea id="q" class="be-ta" placeholder="pampers premium 4&#10;מגבונים האגיס&#10;במבה"></textarea>
+    <div class="be-row"><button class="be-btn" id="go" type="button">Show prices</button><span class="be-status">Nothing is saved unless you tap "Save to my list".</span></div>
+  </section>
+  <section id="results"></section>
+  <div class="be-toast" id="toast" role="status"></div>
+
+<div class="be-offline" id="be-offline" hidden>You're offline, so this is the last saved copy.</div>
+<div class="be-ioshint" id="be-ioshint" hidden><b>Add to your Home Screen:</b> tap <span aria-label="Share">Share</span> (the square with an arrow), then <b>Add to Home Screen</b>. <button type="button" id="be-ioshint-x" aria-label="Dismiss">✕</button></div>
+<script>
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function () {});
+  var bePrompt = null;
+  window.addEventListener('beforeinstallprompt', function (ev) {
+    ev.preventDefault(); bePrompt = ev;
+    var b = document.getElementById('be-install'); if (b) b.hidden = false;
+  });
+  window.addEventListener('appinstalled', function () { var b = document.getElementById('be-install'); if (b) b.hidden = true; });
+  document.addEventListener('click', function (ev) {
+    if (ev.target && ev.target.id === 'be-install' && bePrompt) { bePrompt.prompt(); bePrompt = null; ev.target.hidden = true; }
+  });
+  function beOnline() { document.getElementById('be-offline').hidden = navigator.onLine; }
+  window.addEventListener('online', beOnline); window.addEventListener('offline', beOnline); beOnline();
+  (function () {
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+    var seen = false; try { seen = localStorage.getItem('be-ioshint') === '1'; } catch (e) {}
+    if (ios && !standalone && !seen) document.getElementById('be-ioshint').hidden = false;
+    document.getElementById('be-ioshint-x').addEventListener('click', function () {
+      document.getElementById('be-ioshint').hidden = true; try { localStorage.setItem('be-ioshint', '1'); } catch (e) {}
+    });
+  })();
+</script>
+</div>
+
+<script>
+const ils = v => '₪' + (Math.abs(v - Math.round(v)) < 0.005 ? String(Math.round(v)) : Number(v).toFixed(2));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 2600); }
+async function api(path, body) {
+  const r = await fetch(path, body === undefined ? {} : {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || r.statusText);
+  return j;
+}
+function itemCard(it, actions) {
+  const real = o => o.deal && o.each < o.shelf - 0.005;
+  const b = it.best;
+  const deal = b && real(b);
+  const size = it.qty && it.unit ? ` · ${it.qty % 1 ? it.qty : Math.round(it.qty)} ${esc(it.unit)}` : '';
+  const chips = it.offers.map((o, i) => `<span class="be-pchip${i === 0 ? ' top' : ''}">${esc(o.retailer)} ${ils(real(o) ? o.each : o.shelf)}${real(o) ? ` <s>${ils(o.shelf)}</s>` + (o.deal.startsWith('₪') ? '' : ` <span class="d">${esc(o.deal)}</span>`) : ''} · ${o.branches} br.</span>`).join('');
+  return `<div class="be-item${deal ? ' deal' : ''}">
+    <div><div class="nm">${esc(it.name)}</div><div class="meta">${esc(it.barcode)}${size}${it.brand ? ' · ' + esc(it.brand) : ''}</div></div>
+    <div><div class="price">${b ? ils(b.each) : '—'}</div><div class="meta" style="text-align:right">${b ? 'at ' + esc(b.retailer) + (deal ? (b.deal.startsWith('₪') ? ', usually ' + ils(b.shelf) : ', ' + esc(b.deal)) : '') : ''}</div></div>
+    <div class="be-chips">${chips}</div>
+    <div class="be-acts">${actions(it)}</div>
+  </div>`;
+}
+</script>
+<script>
+const ALIASES = {"pampers": "פמפרס", "premium": "פרימיום", "huggies": "האגיס", "materna": "מטרנה", "similac": "סימילאק", "nutrilon": "נוטרילון", "aptamil": "אפטמיל", "diapers": "חיתולים", "diaper": "חיתול", "wipes": "מגבונים", "formula": "תמ\"ל", "gold": "גולד", "pro": "פרו", "stage": "שלב", "baby": "תינוק", "milk": "חלב", "bamba": "במבה", "bissli": "ביסלי", "cream": "קרם", "shampoo": "שמפו", "sudocrem": "סודוקרם", "desitin": "דסיטין", "johnson": "ג'ונסון", "babysitter": "בייביסיטר", "telma": "תלמה", "nestle": "נסטלה", "cerelac": "סרלק", "porridge": "דייסה", "pacifier": "מוצץ", "bottle": "בקבוק", "avent": "אוונט", "dry": "דריי", "pants": "מכנסונים", "sensitive": "סנסטיב", "comfort": "קומפורט", "extra": "אקסטרה"};
+const q = document.getElementById('q'), out = document.getElementById('results');
+let CAT = null;
+const LIST_KEY = 'be-mylist';
+function myList() { try { return JSON.parse(localStorage.getItem(LIST_KEY) || '[]'); } catch (e) { return []; } }
+function setList(l) { try { localStorage.setItem(LIST_KEY, JSON.stringify(l)); } catch (e) {} drawList(); }
+function view(row) {
+  const [barcode, name, qty, unit, offersRaw] = row;
+  const offers = offersRaw.map(([rid, shelf, n, each, deal, until]) => ({rid, retailer: CAT.retailers[rid] || rid, shelf, branches: n, each, deal, until}))
+    .sort((a, b) => a.each - b.each);
+  return {barcode, name, qty, unit, offers, best: offers[0] || null};
+}
+async function load() {
+  if (CAT) return CAT;
+  const r = await fetch('data/catalogue.min.json');
+  CAT = await r.json();
+  CAT.byCode = new Map(CAT.items.map((row) => [row[0], row]));
+  document.getElementById('cat-meta').textContent = 'Prices from the check of every Tel Aviv-area branch on ' +
+    new Date(CAT.checked).toLocaleString('en-GB', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jerusalem'}) +
+    '. Club-card and coupon offers not included.';
+  return CAT;
+}
+function search(text, limit) {
+  const toks = text.trim().toLowerCase().split(/\s+/).filter(Boolean).map((t) => ALIASES[t] || t);
+  if (!toks.length) return [];
+  const hits = [];
+  for (const row of CAT.items) {
+    if (toks.length === 1 && /^\d{6,}$/.test(toks[0])) { if (row[0].startsWith(toks[0])) hits.push(row); continue; }
+    const hay = row[1].toLowerCase();
+    if (toks.every((t) => hay.includes(t))) hits.push(row);
+  }
+  hits.sort((a, b) => b[4].length - a[4].length || Math.min(...a[4].map((o) => o[3])) - Math.min(...b[4].map((o) => o[3])));
+  return hits.slice(0, limit).map(view);
+}
+function actions(it) {
+  const saved = myList().includes(it.barcode);
+  return saved ? `<button class="be-btn ghost" data-rm="${esc(it.barcode)}">Remove from my list</button>`
+               : `<button class="be-btn ghost" data-add="${esc(it.barcode)}">Save to my list</button>`;
+}
+async function drawList() {
+  await load();
+  const l = myList().filter((bc) => CAT.byCode.has(bc));
+  document.getElementById('mylist-card').hidden = !l.length;
+  document.getElementById('mylist').innerHTML = l.map((bc) => itemCard(view(CAT.byCode.get(bc)), actions)).join('');
+}
+async function run() {
+  try { sessionStorage.setItem('be-q', q.value); } catch (e) {}
+  await load();
+  out.innerHTML = '';
+  for (const line of q.value.split('\n').map((s) => s.trim()).filter(Boolean)) {
+    const items = search(line, 25);
+    const sec = document.createElement('div');
+    sec.innerHTML = `<h2 class="be-group-h">${esc(line)} · ${items.length ? items.length + ' match' + (items.length > 1 ? 'es' : '') : 'no matches'}</h2><div class="be-list">${items.map((it) => itemCard(it, actions)).join('')}</div>`;
+    out.append(sec);
+  }
+}
+document.addEventListener('click', (ev) => {
+  const a = ev.target.closest('[data-add]'), r = ev.target.closest('[data-rm]');
+  if (a) { const l = myList(); if (!l.includes(a.dataset.add)) l.push(a.dataset.add); setList(l); toast('Saved to your list on this phone.'); run(); }
+  if (r) { setList(myList().filter((bc) => bc !== r.dataset.rm)); toast('Removed.'); if (q.value.trim()) run(); }
+});
+document.getElementById('go').addEventListener('click', run);
+q.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && (ev.metaKey || ev.ctrlKey)) run(); });
+const urlQ = new URLSearchParams(location.search).get('q');
+if (urlQ) q.value = urlQ.split('|').join('\n'); else { try { q.value = sessionStorage.getItem('be-q') || ''; } catch (e) {} }
+load().then(() => { drawList(); if (q.value.trim()) run(); }).catch(() => { document.getElementById('cat-meta').textContent = "Couldn't load prices. Check your connection."; });
+</script>
+</body>
+</html>

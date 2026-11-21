@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Baby Essentials</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0B4F6C">
+<meta name="application-name" content="Baby Essentials">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Baby Essentials">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<style>
+  :root { color-scheme: light dark;
+    --color-bg: #FBF8F2; --font-anthropic-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 16px; --cds-gap-xl: 32px;
+    --cds-pad-sm: 8px; --cds-pad-md: 16px; --cds-pad-lg: 22px; --cds-radius: 14px;
+    --cds-font-size-caption: 13px; --cds-font-size-body: 15px; --cds-font-size-heading: 18px; --cds-font-size-title: 22px;
+    --cds-font-weight-medium: 600; --cds-dur-slow: .5s; --cds-ease-out: cubic-bezier(.2,.8,.2,1); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --color-bg: #0A161B; } }
+  :root[data-theme="dark"] { --color-bg: #0A161B; }
+  body { margin: 0; background: var(--color-bg); padding: 16px; }
+  @media (min-width: 46rem) { body { padding: 32px; } }
+  .be-foot { font-size: 12px; color: var(--be-muted); margin: 0; }
+  .be-nav { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .be-nav a { font: inherit; font-size: 14px; text-decoration: none; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--be-line); color: var(--be-ink); background: var(--be-paper); }
+  .be-nav a[aria-current="page"] { background: var(--be-sea); color: var(--be-sea-ink); border-color: var(--be-sea); }
+  .be-nav .be-brand { font-weight: 700; margin-right: auto; color: var(--be-lagoon); font-size: 16px; }
+  .be-pending { font-size: 12px; color: var(--be-amber); font-weight: 600; }
+  .be-labels { grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)) !important; }
+  .be-lbl-other .be-lbl-name { direction: rtl; text-align: right; unicode-bidi: plaintext; padding-right: 7.5rem; padding-left: 0; }
+  @media (max-width: 30rem) { .be-page .be-sticker { position: static; align-self: flex-start; min-width: 0; margin: 0 0 2px; transform: rotate(-3deg); } }
+  .be-lbl-other .be-big { font-size: calc(var(--cds-font-size-title) * 2); }
+
+  /*
+    Design plan (frontend-design skill), v4 "seaside"
+    Subject: a Tel Aviv parent's daily check on diapers and formula, read on a phone in a pharmacy aisle.
+    Concept: the shelf-edge price labels stay, now set on a Tel Aviv beach: a deep-sea header with a wave edge,
+    labels resting on sand, and coral for the one thing that matters, a real deal. The shop to buy from is
+    a deep-sea pill on every label and every table row, so "where" is as easy to see as "how much".
+    Color: deep sea #0B4F6C (header, shop pills), lagoon #0E8A7E (good news, availability),
+           sand #F5ECDD (shelf), driftwood #D9C7A7 (shelf rail), foam #E4F4F2 (deal rows),
+           coral #D2432B (deal sticker and deal text, white ink on it). Dark theme: night sea and wet sand.
+    Type: the dashboard's sans. Prices bold and tight; everything else regular or medium.
+  */
+  .be-page {
+    --be-sea: #0B4F6C; --be-sea-2: #1B7F99; --be-sea-ink: #FFFFFF;
+    --be-lagoon: #0E8A7E; --be-sand: #F5ECDD; --be-drift: #D9C7A7;
+    --be-foam: #E4F4F2; --be-coral: #D2432B; --be-coral-ink: #FFFFFF; --be-coral-text: #B8371F;
+    --be-amber: #9A5F0C; --be-paper: #FFFFFF; --be-ink: #10303D; --be-muted: #4F6873;
+    --be-line: #D7E3E6;
+    display: grid; gap: var(--cds-gap-xl); max-width: 74rem; margin-inline: auto;
+    font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; color: var(--be-ink);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .be-page {
+      --be-sea: #0F3B4F; --be-sea-2: #17617A; --be-lagoon: #4FD1BF; --be-sand: #1B2A2F; --be-drift: #3A4A4C;
+      --be-foam: #12363A; --be-coral: #F07257; --be-coral-ink: #1E0B06; --be-coral-text: #FF9278;
+      --be-amber: #F0B45A; --be-paper: #0F1E24; --be-ink: #E5F1F2; --be-muted: #9DB4BA; --be-line: #24393F;
+    }
+  }
+  :root[data-theme="dark"] .be-page {
+    --be-sea: #0F3B4F; --be-sea-2: #17617A; --be-lagoon: #4FD1BF; --be-sand: #1B2A2F; --be-drift: #3A4A4C;
+    --be-foam: #12363A; --be-coral: #F07257; --be-coral-ink: #1E0B06; --be-coral-text: #FF9278;
+    --be-amber: #F0B45A; --be-paper: #0F1E24; --be-ink: #E5F1F2; --be-muted: #9DB4BA; --be-line: #24393F;
+  }
+
+  /* Header: the sea, with a wave edge */
+  .be-head { position: relative; display: grid; gap: var(--cds-gap-sm); padding: var(--cds-pad-lg) var(--cds-pad-lg) calc(var(--cds-pad-lg) + 18px);
+    background: linear-gradient(160deg, var(--be-sea-2), var(--be-sea) 70%); color: var(--be-sea-ink); border-radius: var(--cds-radius); overflow: hidden; }
+  .be-head > * { max-width: 48rem; position: relative; }
+  .be-wave { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 22px; max-width: none; }
+  .be-wave path { fill: var(--color-bg); }
+  .be-title { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); opacity: .85; }
+  .be-take { margin: 0; font-size: calc(var(--cds-font-size-title) * 1.25); line-height: 1.3; font-weight: 400; text-wrap: balance; }
+  .be-meta { margin: 0; font-size: var(--cds-font-size-caption); opacity: .85; }
+
+  .be-shelfblock { display: grid; gap: var(--cds-gap-sm); }
+  .be-shelfname { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); color: var(--be-muted); }
+  .be-shelf { background: var(--be-sand); border-radius: var(--cds-radius) var(--cds-radius) 0 0; padding: calc(var(--cds-pad-md) + 6px) var(--cds-pad-md) 0; border-bottom: 10px solid var(--be-drift); }
+  .be-labels { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr)); padding-bottom: var(--cds-pad-md); }
+  .be-labels-formula { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 46rem) { .be-labels-formula { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+
+  .be-lbl { position: relative; display: flex; flex-direction: column; gap: var(--cds-gap-sm); background: var(--be-paper); padding: var(--cds-pad-lg) var(--cds-pad-lg) var(--cds-pad-md); min-width: 0;
+    border: 1px solid var(--be-line); border-radius: 10px; }
+  .be-lbl:has(.be-sticker[data-kind="deal"]) { border: 2px solid var(--be-coral); box-shadow: 0 6px 18px -10px var(--be-coral); }
+  .be-lbl-name { margin: 0; padding-right: 7.5rem; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); line-height: 1.2; }
+  .be-lbl-size { display: block; font-size: calc(var(--cds-font-size-title) * 1.2); font-weight: 700; line-height: 1.05; margin-top: 2px; }
+  .be-lbl-pack { margin: 0; color: var(--be-muted); font-size: var(--cds-font-size-caption); }
+
+  .be-sticker { position: absolute; top: calc(var(--cds-pad-md) * -1); right: var(--cds-pad-md); margin: 0; display: grid; justify-items: center; min-width: 6.5rem; padding: 10px 12px; background: var(--be-coral); color: var(--be-coral-ink); border-radius: 8px; transform: rotate(-4deg); box-shadow: 0 3px 0 color-mix(in srgb, var(--be-coral) 55%, #000); text-align: center; line-height: 1.1; }
+  .be-sticker::before { content: "DEAL"; font-size: 10px; font-weight: 800; letter-spacing: .12em; opacity: .85; }
+  .be-page .be-sticker b { font-size: var(--cds-font-size-heading); font-weight: 800; }
+  .be-sticker span { font-size: var(--cds-font-size-caption); }
+  .be-sticker[data-kind="none"] { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .be-sticker { animation: be-stick var(--cds-dur-slow) var(--cds-ease-out) both; }
+    @keyframes be-stick { from { transform: rotate(-14deg) scale(1.15); opacity: 0; } to { transform: rotate(-4deg) scale(1); opacity: 1; } }
+  }
+
+  .be-price { display: flex; align-items: baseline; gap: var(--cds-gap-sm); flex-wrap: wrap; margin-top: var(--cds-gap-sm); }
+  .be-big { font-size: calc(var(--cds-font-size-title) * 2.6); font-weight: 700; line-height: .95; letter-spacing: -.03em; }
+  .be-lbl:has(.be-sticker[data-kind="deal"]) .be-big { color: var(--be-coral-text); }
+  .be-big .be-cur { font-size: .5em; font-weight: 600; margin-right: 2px; vertical-align: .55em; letter-spacing: 0; }
+  .be-for { font-size: var(--cds-font-size-body); color: var(--be-muted); }
+
+  .be-unitbox { display: inline-grid; grid-template-columns: auto auto; align-items: baseline; gap: 2px 10px; align-self: flex-start; border: 1px solid var(--be-ink); border-radius: 4px; padding: 4px 10px; font-size: var(--cds-font-size-caption); }
+  .be-page .be-unitbox b { font-size: var(--cds-font-size-body); font-weight: 700; }
+
+  .be-verdict { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: var(--cds-font-size-body); }
+  .be-chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); border: 1px solid currentColor; white-space: nowrap; color: var(--be-muted); }
+  .be-chip[data-status="Excellent"] { color: var(--be-lagoon); background: color-mix(in srgb, var(--be-lagoon) 12%, transparent); }
+  .be-chip[data-status="Good"] { color: var(--be-amber); }
+  .be-chip[data-status="Not stocked"], .be-chip[data-status="Check failed"], .be-chip[data-status="Expensive"] { color: var(--be-coral-text); }
+
+  /* Where to buy: the shop is a deep-sea pill */
+  .be-where { margin: 0; display: grid; gap: 4px; font-size: var(--cds-font-size-body); justify-items: start; padding: var(--cds-pad-sm); background: color-mix(in srgb, var(--be-sea-2) 8%, transparent); border-radius: 8px; }
+  .be-buyat { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--be-muted); }
+  .be-shop { display: inline-block; padding: 3px 12px; border-radius: 999px; background: var(--be-sea); color: var(--be-sea-ink); font-weight: 700; font-size: var(--cds-font-size-body); }
+  .be-sub { color: var(--be-muted); font-size: var(--cds-font-size-caption); }
+  .be-avail { display: inline-flex; align-items: center; gap: 6px; font-size: var(--cds-font-size-caption); }
+  .be-avail::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--be-lagoon); flex: none; }
+
+  .be-ean { margin: auto 0 0; padding-top: var(--cds-pad-sm); border-top: 1px dashed var(--be-line); display: flex; align-items: end; gap: 10px; color: var(--be-muted); font-size: var(--cds-font-size-caption); letter-spacing: .04em; }
+  .be-bars { flex: none; width: 3.25rem; height: 1.1rem; background: repeating-linear-gradient(90deg, var(--be-ink) 0 1px, transparent 1px 3px, var(--be-ink) 3px 5px, transparent 5px 6px, var(--be-ink) 6px 7px, transparent 7px 10px); opacity: .6; }
+
+  .be-formula-note { display: grid; align-content: start; gap: var(--cds-gap-sm); background: var(--be-paper); border: 1px solid var(--be-line); border-radius: 10px; padding: var(--cds-pad-lg); font-size: var(--cds-font-size-body); line-height: 1.5; }
+  .be-formula-note p { margin: 0; max-width: 52ch; }
+  .be-formula-note h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+
+  .be-section { display: grid; gap: var(--cds-gap-md); min-width: 0; }
+  .be-sechead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--cds-gap-md); }
+  .be-sechead h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .be-sechead p { margin: 2px 0 0; color: var(--be-muted); font-size: var(--cds-font-size-caption); }
+  .be-key { display: inline-flex; align-items: center; gap: 6px; }
+  .be-key::before { content: ""; width: .9rem; height: .9rem; border-radius: 3px; background: var(--be-foam); border-left: 3px solid var(--be-coral); }
+  .be-tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); }
+  .be-tab { font: inherit; font-size: var(--cds-font-size-caption); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--be-line); background: transparent; color: var(--be-ink); cursor: pointer; }
+  .be-tab[aria-pressed="true"] { background: var(--be-sea); color: var(--be-sea-ink); border-color: var(--be-sea); }
+  .be-tab:focus-visible { outline: 2px solid var(--be-sea-2); outline-offset: 2px; }
+
+  .be-tablewrap { overflow-x: auto; border-top: 2px solid var(--be-sea); }
+  .be-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); }
+  .be-table th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--be-muted); font-size: var(--cds-font-size-caption); padding: 8px 10px; border-bottom: 1px solid var(--be-line); white-space: nowrap; }
+  .be-table td { padding: 10px; border-bottom: 1px solid var(--be-line); vertical-align: top; }
+  .be-table .num { text-align: right; white-space: nowrap; }
+  .be-table td.be-cond { color: var(--be-muted); font-size: var(--cds-font-size-caption); min-width: 14rem; }
+  .be-table tr.be-deal td { background: var(--be-foam); }
+  .be-table tr.be-deal td:first-child { box-shadow: inset 3px 0 0 var(--be-coral); }
+  .be-table tr.be-deal td.be-dealtxt { color: var(--be-coral-text); font-weight: 700; }
+  .be-table tr.be-out td:not(:last-child) { color: var(--be-muted); }
+  .be-table tr.be-group td { padding-top: var(--cds-pad-lg); font-weight: var(--cds-font-weight-medium); background: none; }
+  .be-tshop { display: inline-block; padding: 1px 10px; border-radius: 999px; border: 1px solid var(--be-sea-2); color: var(--be-ink); font-weight: var(--cds-font-weight-medium); white-space: nowrap; }
+  .be-table tr.be-top .be-tshop { background: var(--be-sea); border-color: var(--be-sea); color: var(--be-sea-ink); }
+  .be-best { display: inline-block; margin-left: 6px; font-size: 10px; font-weight: 800; letter-spacing: .1em; color: var(--be-lagoon); vertical-align: 1px; }
+  @media (max-width: 40rem) { .be-hide-narrow { display: none; } }
+
+  .be-notes { font-size: var(--cds-font-size-caption); color: var(--be-muted); }
+  .be-notes summary { cursor: pointer; color: var(--be-ink); }
+  .be-notes dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: var(--cds-gap-sm) 0 0; max-width: 70ch; }
+  .be-notes dt { color: var(--be-ink); }
+  .be-notes dd { margin: 0; }
+  @media (max-width: 30rem) { .be-notes dl { grid-template-columns: 1fr; } .be-lbl-name { padding-right: 0; } .be-sticker { position: static; justify-self: start; } }
+
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+
+  .be-page [hidden] { display: none !important; }
+  .be-ioshint { position: fixed; left: 12px; right: 12px; bottom: 12px; max-width: 40rem; margin: 0 auto; padding: 12px 40px 12px 14px; border-radius: 12px; background: var(--be-sea); color: var(--be-sea-ink); font-size: 14px; line-height: 1.4; z-index: 11; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  .be-ioshint button { position: absolute; top: 8px; right: 8px; font: inherit; border: none; background: none; color: inherit; font-size: 16px; cursor: pointer; }
+  @media (max-width: 34rem) { .be-page .be-take { font-size: 19px; line-height: 1.35; } .be-head { padding: 18px 18px 30px; } .be-nav { gap: 4px; } .be-nav a, .be-nav button.be-installbtn { font-size: 13px; padding: 5px 10px; } .be-nav .be-brand { flex-basis: 100%; } }
+  .be-nav button.be-installbtn { font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--be-coral); background: var(--be-coral); color: var(--be-coral-ink); cursor: pointer; }
+  .be-offline { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 40rem; margin: 0 auto; padding: 10px 14px; border-radius: 10px; background: var(--be-ink); color: var(--be-paper); font-size: 14px; z-index: 10; }
+  @media (display-mode: standalone) { body { padding-top: max(16px, env(safe-area-inset-top)); } }
+</style>
+</head>
+<body>
+<div class="be-page">
+<nav class="be-nav"><span class="be-brand">Baby Essentials</span><a href="./" aria-current="page">Dashboard</a><a href="./search.html">Search prices</a><button type="button" class="be-installbtn" id="be-install" hidden>Install app</button></nav>
+
+  <header class="be-head">
+    <h1 class="be-title">Baby Essentials</h1>
+    <p class="be-take">Pampers Premium 4, 4+ and 5 are <b>3 for ₪90</b> at <b>Good Pharm and Be Pharm</b>, until 30 Nov. Materna Gold Pro 5HM-O is <b>₪79.90</b> a tin at <b>Shufersal Online and Be Pharm</b>.</p>
+    <p class="be-meta">Tel Aviv-Yafo, Ramat Gan and Givatayim, from each chain's official price files. Checked 21 Nov 2026, 08:34 Israel time.</p>
+    <svg class="be-wave" viewBox="0 0 1200 22" preserveAspectRatio="none" aria-hidden="true"><path d="M0 12 C 100 0 200 0 300 12 S 500 24 600 12 S 800 0 900 12 S 1100 24 1200 12 V22 H0 Z"/></svg>
+  </header>
+  
+  <section class="be-shelfblock">
+    <h2 class="be-shelfname">Diapers, best price for 3 packs</h2>
+    <div class="be-shelf"><div class="be-labels">
+        <article class="be-lbl">
+          <p class="be-sticker" data-kind="deal"><b>3 for ₪90</b><span>until 30 Nov</span></p>
+          <h3 class="be-lbl-name">Pampers Premium <span class="be-lbl-size">Size 4</span></h3>
+          <p class="be-lbl-pack">28 diapers in each pack</p>
+          <div class="be-price"><span class="be-big"><span class="be-cur">₪</span><span>90</span></span><span class="be-for">for 3 packs</span></div>
+          <div class="be-unitbox"><b>₪1.07</b><span>per diaper</span><b>₪30.00</b><span>per pack</span></div>
+          <p class="be-verdict"><span class="be-chip" data-status="Excellent">Excellent</span><span>₪10 under your ₪100 target</span></p>
+          <p class="be-where"><span class="be-buyat">Buy at</span><b class="be-shop">Good Pharm</b><span class="be-sub">All 21 Tel Aviv-area branches</span><span class="be-sub">Same price at Be Pharm</span><span class="be-avail">Available for local collection</span></p>
+          <p class="be-ean"><span class="be-bars" aria-hidden="true"></span><span>8700216890946</span></p>
+        </article>
+        <article class="be-lbl">
+          <p class="be-sticker" data-kind="deal"><b>3 for ₪90</b><span>until 30 Nov</span></p>
+          <h3 class="be-lbl-name">Pampers Premium <span class="be-lbl-size">Size 4+</span></h3>
+          <p class="be-lbl-pack">26 diapers in each pack</p>
+          <div class="be-price"><span class="be-big"><span class="be-cur">₪</span><span>90</span></span><span class="be-for">for 3 packs</span></div>
+          <div class="be-unitbox"><b>₪1.15</b><span>per diaper</span><b>₪30.00</b><span>per pack</span></div>
+          <p class="be-verdict"><span class="be-chip" data-status="Excellent">Excellent</span><span>₪10 under your ₪100 target</span></p>
+          <p class="be-where"><span class="be-buyat">Buy at</span><b class="be-shop">Good Pharm</b><span class="be-sub">18 Tel Aviv-area branches</span><span class="be-sub">Same price at Be Pharm</span><span class="be-avail">Available for local collection</span></p>
+          <p class="be-ean"><span class="be-bars" aria-hidden="true"></span><span>8006530259217</span></p>
+        </article>
+        <article class="be-lbl">
+          <p class="be-sticker" data-kind="deal"><b>3 for ₪90</b><span>until 30 Nov</span></p>
+          <h3 class="be-lbl-name">Pampers Premium <span class="be-lbl-size">Size 5</span></h3>
+          <p class="be-lbl-pack">24 diapers in each pack</p>
+          <div class="be-price"><span class="be-big"><span class="be-cur">₪</span><span>90</span></span><span class="be-for">for 3 packs</span></div>
+          <div class="be-unitbox"><b>₪1.25</b><span>per diaper</span><b>₪30.00</b><span>per pack</span></div>
+          <p class="be-verdict"><span class="be-chip" data-status="Excellent">Excellent</span><span>₪10 under your ₪100 target</span></p>
+          <p class="be-where"><span class="be-buyat">Buy at</span><b class="be-shop">Good Pharm</b><span class="be-sub">All 21 Tel Aviv-area branches</span><span class="be-sub">Same price at Be Pharm</span><span class="be-avail">Available for local collection</span></p>
+          <p class="be-ean"><span class="be-bars" aria-hidden="true"></span><span>8700216891103</span></p>
+        </article>
+    </div></div>
+  </section>
+  <section class="be-shelfblock">
+    <h2 class="be-shelfname">Formula, best price for one tin</h2>
+    <div class="be-shelf"><div class="be-labels">
+        <article class="be-lbl">
+          <p class="be-sticker" data-kind="none"></p>
+          <h3 class="be-lbl-name">Materna Gold Pro 5HM-O <span class="be-lbl-size"></span></h3>
+          <p class="be-lbl-pack">700 g tin, 3 versions (e.g. stages)</p>
+          <div class="be-price"><span class="be-big"><span class="be-cur">₪</span><span>79.90</span></span><span class="be-for">per 700 g tin</span></div>
+          <div class="be-unitbox"><b>₪11.41</b><span>per 100 g</span></div>
+          <p class="be-verdict"><span class="be-chip" data-status="Excellent">Excellent</span><span>₪1.10 under your ₪81 target</span></p>
+          <p class="be-where"><span class="be-buyat">Buy at</span><b class="be-shop">Shufersal Online</b><span class="be-sub">Home delivery</span><span class="be-sub">Same price at Be Pharm</span><span class="be-avail">Deliverable to Tel Aviv</span></p>
+          <p class="be-ean"><span class="be-bars" aria-hidden="true"></span><span>7290018132661, 7290018132647, 7290018132623</span></p>
+        </article>
+    </div></div>
+  </section>
+  <section class="be-section">
+    <div class="be-sechead">
+      <div>
+        <h2>Every retailer, side by side</h2>
+        <p>Totals are for the amount on each label. <span class="be-key">Live promotion</span></p>
+      </div>
+      <div class="be-tabs" role="group" aria-label="Product">
+        <button type="button" class="be-tab" data-filter="" aria-pressed="true">All</button><button type="button" class="be-tab" data-filter="p4" aria-pressed="false">Size 4</button><button type="button" class="be-tab" data-filter="p4p" aria-pressed="false">Size 4+</button><button type="button" class="be-tab" data-filter="p5" aria-pressed="false">Size 5</button><button type="button" class="be-tab" data-filter="mgp" aria-pressed="false">Materna Gold Pro 5HM-O</button>
+      </div>
+    </div>
+    <div class="be-tablewrap">
+      <table class="be-table">
+        <thead><tr><th>Retailer</th><th>Deal</th><th class="num">Total</th><th class="num be-hide-narrow">Per pack</th><th class="num be-hide-narrow">Per diaper or 100 g</th><th>Status</th><th class="be-hide-narrow">How to get it</th><th class="be-hide-narrow">Until</th><th>Notes</th></tr></thead>
+        <tbody>
+<tr class="be-group" data-p="p4"><td colspan="9">Pampers Premium · Size 4</td></tr>
+<tr class="be-deal be-top" data-p="p4"><td><span class="be-tshop">Good Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">3 for ₪90</td><td class="num">₪90</td><td class="num be-hide-narrow">₪30.00</td><td class="num be-hide-narrow">₪1.07</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">30 Nov</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal be-top" data-p="p4"><td><span class="be-tshop">Be Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">3 for ₪90</td><td class="num">₪90</td><td class="num be-hide-narrow">₪30.00</td><td class="num be-hide-narrow">₪1.07</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">30 Nov</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal" data-p="p4"><td><span class="be-tshop">Super-Pharm</span></td><td class="be-dealtxt">3 for ₪105</td><td class="num">₪105</td><td class="num be-hide-narrow">₪35.00</td><td class="num be-hide-narrow">₪1.25</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">1 Dec</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal" data-p="p4"><td><span class="be-tshop">Super-Pharm Online</span></td><td class="be-dealtxt">3 for ₪105</td><td class="num">₪105</td><td class="num be-hide-narrow">₪35.00</td><td class="num be-hide-narrow">₪1.25</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">1 Dec</td><td class="be-cond">All customers, no coupon. Delivery fee not included yet</td></tr>
+<tr class="be-deal" data-p="p4"><td><span class="be-tshop">Shufersal Online</span></td><td class="be-dealtxt">3 for ₪110</td><td class="num">₪110</td><td class="num be-hide-narrow">₪36.67</td><td class="num be-hide-narrow">₪1.31</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">27 Nov</td><td class="be-cond">All customers, no coupon. Delivery fee not included yet</td></tr>
+<tr class="be-out" data-p="p4"><td><span class="be-tshop">AM:PM</span></td><td class="be-dealtxt">Not stocked</td><td class="num">—</td><td class="num be-hide-narrow">—</td><td class="num be-hide-narrow">—</td><td><span class="be-chip" data-status="Not stocked">Not stocked</span></td><td class="be-hide-narrow">Not available locally</td><td class="be-hide-narrow">—</td><td class="be-cond">No branch lists it</td></tr>
+<tr class="be-group" data-p="p4p"><td colspan="9">Pampers Premium · Size 4+</td></tr>
+<tr class="be-deal be-top" data-p="p4p"><td><span class="be-tshop">Good Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">3 for ₪90</td><td class="num">₪90</td><td class="num be-hide-narrow">₪30.00</td><td class="num be-hide-narrow">₪1.15</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">30 Nov</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal be-top" data-p="p4p"><td><span class="be-tshop">Be Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">3 for ₪90</td><td class="num">₪90</td><td class="num be-hide-narrow">₪30.00</td><td class="num be-hide-narrow">₪1.15</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">30 Nov</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal" data-p="p4p"><td><span class="be-tshop">Super-Pharm</span></td><td class="be-dealtxt">3 for ₪105</td><td class="num">₪105</td><td class="num be-hide-narrow">₪35.00</td><td class="num be-hide-narrow">₪1.35</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">1 Dec</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal" data-p="p4p"><td><span class="be-tshop">Super-Pharm Online</span></td><td class="be-dealtxt">3 for ₪105</td><td class="num">₪105</td><td class="num be-hide-narrow">₪35.00</td><td class="num be-hide-narrow">₪1.35</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">1 Dec</td><td class="be-cond">All customers, no coupon. Delivery fee not included yet</td></tr>
+<tr class="be-deal" data-p="p4p"><td><span class="be-tshop">Shufersal Online</span></td><td class="be-dealtxt">3 for ₪110</td><td class="num">₪110</td><td class="num be-hide-narrow">₪36.67</td><td class="num be-hide-narrow">₪1.41</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">27 Nov</td><td class="be-cond">All customers, no coupon. Delivery fee not included yet</td></tr>
+<tr class="be-out" data-p="p4p"><td><span class="be-tshop">AM:PM</span></td><td class="be-dealtxt">Not stocked</td><td class="num">—</td><td class="num be-hide-narrow">—</td><td class="num be-hide-narrow">—</td><td><span class="be-chip" data-status="Not stocked">Not stocked</span></td><td class="be-hide-narrow">Not available locally</td><td class="be-hide-narrow">—</td><td class="be-cond">No branch lists it</td></tr>
+<tr class="be-group" data-p="p5"><td colspan="9">Pampers Premium · Size 5</td></tr>
+<tr class="be-deal be-top" data-p="p5"><td><span class="be-tshop">Good Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">3 for ₪90</td><td class="num">₪90</td><td class="num be-hide-narrow">₪30.00</td><td class="num be-hide-narrow">₪1.25</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">30 Nov</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal be-top" data-p="p5"><td><span class="be-tshop">Be Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">3 for ₪90</td><td class="num">₪90</td><td class="num be-hide-narrow">₪30.00</td><td class="num be-hide-narrow">₪1.25</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">30 Nov</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal" data-p="p5"><td><span class="be-tshop">Super-Pharm</span></td><td class="be-dealtxt">3 for ₪105</td><td class="num">₪105</td><td class="num be-hide-narrow">₪35.00</td><td class="num be-hide-narrow">₪1.46</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">1 Dec</td><td class="be-cond">All customers, no coupon</td></tr>
+<tr class="be-deal" data-p="p5"><td><span class="be-tshop">Super-Pharm Online</span></td><td class="be-dealtxt">3 for ₪105</td><td class="num">₪105</td><td class="num be-hide-narrow">₪35.00</td><td class="num be-hide-narrow">₪1.46</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">1 Dec</td><td class="be-cond">All customers, no coupon. Delivery fee not included yet</td></tr>
+<tr class="be-deal" data-p="p5"><td><span class="be-tshop">Shufersal Online</span></td><td class="be-dealtxt">3 for ₪110</td><td class="num">₪110</td><td class="num be-hide-narrow">₪36.67</td><td class="num be-hide-narrow">₪1.53</td><td><span class="be-chip" data-status="Good">Good</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">27 Nov</td><td class="be-cond">All customers, no coupon. Delivery fee not included yet</td></tr>
+<tr class="" data-p="p5"><td><span class="be-tshop">AM:PM</span></td><td class="be-dealtxt">No promotion</td><td class="num">₪119.70</td><td class="num be-hide-narrow">₪39.90</td><td class="num be-hide-narrow">₪1.66</td><td><span class="be-chip" data-status="Normal">Normal</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">—</td><td class="be-cond">7 of these branches haven&#x27;t sold it in 21+ days</td></tr>
+<tr class="be-group" data-p="mgp"><td colspan="9">Materna Gold Pro 5HM-O · 700 g</td></tr>
+<tr class="be-top" data-p="mgp"><td><span class="be-tshop">Shufersal Online</span><span class="be-best">BEST</span></td><td class="be-dealtxt">Regular price</td><td class="num">₪79.90</td><td class="num be-hide-narrow">₪79.90</td><td class="num be-hide-narrow">₪11.41</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">—</td><td class="be-cond">Delivery fee not included yet</td></tr>
+<tr class="be-top" data-p="mgp"><td><span class="be-tshop">Be Pharm</span><span class="be-best">BEST</span></td><td class="be-dealtxt">Regular price</td><td class="num">₪79.90</td><td class="num be-hide-narrow">₪79.90</td><td class="num be-hide-narrow">₪11.41</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">—</td><td class="be-cond">1 of these branches hasn&#x27;t sold it in 21+ days</td></tr>
+<tr class="" data-p="mgp"><td><span class="be-tshop">Super-Pharm</span></td><td class="be-dealtxt">Regular price</td><td class="num">₪80.60</td><td class="num be-hide-narrow">₪80.60</td><td class="num be-hide-narrow">₪11.51</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Available for local collection</td><td class="be-hide-narrow">—</td><td class="be-cond">34 other branches list it for more</td></tr>
+<tr class="" data-p="mgp"><td><span class="be-tshop">Super-Pharm Online</span></td><td class="be-dealtxt">Regular price</td><td class="num">₪80.90</td><td class="num be-hide-narrow">₪80.90</td><td class="num be-hide-narrow">₪11.56</td><td><span class="be-chip" data-status="Excellent">Excellent</span></td><td class="be-hide-narrow">Deliverable to Tel Aviv</td><td class="be-hide-narrow">—</td><td class="be-cond">Delivery fee not included yet</td></tr>
+<tr class="be-out" data-p="mgp"><td><span class="be-tshop">Good Pharm</span></td><td class="be-dealtxt">Not stocked</td><td class="num">—</td><td class="num be-hide-narrow">—</td><td class="num be-hide-narrow">—</td><td><span class="be-chip" data-status="Not stocked">Not stocked</span></td><td class="be-hide-narrow">Not available locally</td><td class="be-hide-narrow">—</td><td class="be-cond">No branch lists it</td></tr>
+<tr class="be-out" data-p="mgp"><td><span class="be-tshop">AM:PM</span></td><td class="be-dealtxt">Not stocked</td><td class="num">—</td><td class="num be-hide-narrow">—</td><td class="num be-hide-narrow">—</td><td><span class="be-chip" data-status="Not stocked">Not stocked</span></td><td class="be-hide-narrow">Not available locally</td><td class="be-hide-narrow">—</td><td class="be-cond">No branch lists it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="be-foot">Written 21 Nov 2026, 08:53. Club-only, coupon and gift offers are not counted. Delivery fees for online shops are not included yet.</p>
+
+<div class="be-offline" id="be-offline" hidden>You're offline, so this is the last saved copy.</div>
+<div class="be-ioshint" id="be-ioshint" hidden><b>Add to your Home Screen:</b> tap <span aria-label="Share">Share</span> (the square with an arrow), then <b>Add to Home Screen</b>. <button type="button" id="be-ioshint-x" aria-label="Dismiss">✕</button></div>
+<script>
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(function () {});
+  var bePrompt = null;
+  window.addEventListener('beforeinstallprompt', function (ev) {
+    ev.preventDefault(); bePrompt = ev;
+    var b = document.getElementById('be-install'); if (b) b.hidden = false;
+  });
+  window.addEventListener('appinstalled', function () { var b = document.getElementById('be-install'); if (b) b.hidden = true; });
+  document.addEventListener('click', function (ev) {
+    if (ev.target && ev.target.id === 'be-install' && bePrompt) { bePrompt.prompt(); bePrompt = null; ev.target.hidden = true; }
+  });
+  function beOnline() { document.getElementById('be-offline').hidden = navigator.onLine; }
+  window.addEventListener('online', beOnline); window.addEventListener('offline', beOnline); beOnline();
+  (function () {
+    var ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+    var seen = false; try { seen = localStorage.getItem('be-ioshint') === '1'; } catch (e) {}
+    if (ios && !standalone && !seen) document.getElementById('be-ioshint').hidden = false;
+    document.getElementById('be-ioshint-x').addEventListener('click', function () {
+      document.getElementById('be-ioshint').hidden = true; try { localStorage.setItem('be-ioshint', '1'); } catch (e) {}
+    });
+  })();
+</script>
+</div>
+<script>
+  document.querySelectorAll('.be-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = btn.dataset.filter;
+      document.querySelectorAll('.be-tab').forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      document.querySelectorAll('.be-table tbody tr').forEach(function (tr) { tr.hidden = !!f && tr.dataset.p !== f; });
+    });
+  });
+</script>
+</body>
+</html>
